@@ -1,4 +1,4 @@
 libAsarone
 ==========
 
-Small C++ library which makes faster development of some applications.
+Library consists of implementation of some features I frequently use in my projects, and some C++ classes which make SDL2 and OpenGL using faster.
