@@ -12,12 +12,6 @@ public:
 
 	}
 
-	FragmentShader(const char *addr) :
-		Shader(GL_FRAGMENT_SHADER, addr)
-	{
-
-	}
-
 	virtual ~FragmentShader()
 	{
 

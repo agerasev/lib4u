@@ -14,12 +14,6 @@ public:
 
 	}
 
-	VertexShader(const char *addr) :
-		Shader(GL_VERTEX_SHADER, addr)
-	{
-
-	}
-
 	virtual ~VertexShader()
 	{
 

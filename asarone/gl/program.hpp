@@ -9,24 +9,26 @@ class Program
 private:
 	GLuint id;
 
-	void logLinking() {
+	bool logLinking() {
 		int link_ok;
 		glGetProgramiv(id, GL_LINK_STATUS, &link_ok);
 		if(!link_ok) {
-			std::cout << "Error attach shaders" << "\n";
+			std::cout << "Error attach shaders" << std::endl;
+			return false;
 		}
+		return true;
 	}
 
 	void logAttribute(GLint attrib, const GLchar *name) {
 		if(attrib == -1)
 		{
-			std::cout << "Could not bind attribute " << name << "\n";
+			std::cout << "Could not bind attribute " << name << std::endl;
 		}
 	}
 	void logUniform(GLint unif, const GLchar *name) {
 		if(unif == -1)
 		{
-			std::cout << "Could not bind uniform " << name << "\n";
+			std::cout << "Could not bind uniform " << name << std::endl;
 		}
 	}
 
@@ -39,20 +41,26 @@ public:
 		glDeleteProgram(id);
 	}
 
-	void attach(Shader &sh) {
-		glAttachShader(id,sh.getID());
-
+	void attach(const Shader *sh) {
+		glAttachShader(id,sh->getID());
 	}
-	void link() {
+	void detach(const Shader *sh) {
+		glDetachShader(id,sh->getID());
+	}
+	bool link() {
 		glLinkProgram(id);
-		logLinking();
+		return logLinking();
 	}
 
-	virtual void enable() {
+	void enable() {
 		glUseProgram(id);
 	}
-	virtual void disable() {
+	void disable() {
 		glUseProgram(0);
+	}
+
+	virtual void pull() {
+
 	}
 
 	GLint getAttribute(const GLchar *name) {

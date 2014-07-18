@@ -23,7 +23,7 @@ private:
 		{
 			infoLog = new char[infologLen];
 			glGetShaderInfoLog(id, infologLen, &charsWritten, infoLog);
-			std::cout << infoLog;
+			std::cout << infoLog << std::endl;
 			delete[] infoLog;
 		}
 	}
@@ -35,18 +35,12 @@ public:
 		id = glCreateShader(type);
 	}
 
-	Shader(GLenum type, const char *addr) : Shader(type)
-	{
-		loadSourceFromFile(addr);
-		compile();
-	}
-
 	virtual ~Shader()
 	{
 		glDeleteShader(id);
 	}
 
-	void loadSourceFromFile(const char *addr) {
+	bool loadSourceFromFile(const char *addr) {
 
 		int length;
 
@@ -55,7 +49,7 @@ public:
 		if(!is)
 		{
 			std::cout << "couldn't find " << addr << "file\n";
-			return;
+			return false;
 		}
 
 		is.seekg (0, std::ios::end);
@@ -70,12 +64,17 @@ public:
 		is.close();
 
 		glShaderSource(id, 1, const_cast<const GLchar**>(&src), nullptr);
+		return true;
 	}
 
-	void compile()
+	bool compile()
 	{
 		glCompileShader(id);
 		logCompilation();
+
+		GLint st;
+		glGetShaderiv(id,GL_COMPILE_STATUS,&st);
+		return st==GL_TRUE?true:false;
 	}
 
 	GLuint getID() const
