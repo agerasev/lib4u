@@ -29,18 +29,16 @@ struct tvecn<T,2> {
 		this->data[1] = static_cast<T>(av.data[1]);
 		return *this;
 	}
-    inline T &operator ()(int n) {
+	inline T &operator ()(int n) {
         return data[n];
-    }
-    inline T operator ()(int n) const {
+	}
+	inline T operator ()(int n) const {
         return data[n];
-    }
-    template <int P>
-    inline T comp() const {return data[P];}
-    template <int P>
-    inline T &comp() {return data[P];}
-    using x = comp<0>;
-    using y = comp<1>;
+	}
+	inline T x() const {return data[0];}
+	inline T &x() {return data[0];}
+	inline T y() const {return data[1];}
+	inline T &y() {return data[1];}
 };
 
 // Pseudo cross product

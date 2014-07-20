@@ -90,15 +90,17 @@ struct tmatnm<T,N,N> {
 // Diagonal matrix creation
 template <typename T, typename S, int N>
 inline tmatnm<T,N,N> diag(S diag) {
+	tmatnm<T,N,N> ret;
     for(int iy = 0; iy < N; ++iy) {
         for(int ix = 0; ix < N; ++ix) {
             if(ix == iy) {
-                (*this)(ix,iy) = static_cast<T>(diag);
+				ret(ix,iy) = static_cast<T>(diag);
             } else {
-                (*this)(ix,iy) = static_cast<T>(0);
+				ret(ix,iy) = static_cast<T>(0);
             }
         }
     }
+	return ret;
 }
 
 

@@ -139,6 +139,7 @@ template <typename T, int N, int M>
 inline tmatnm<T,N,M> &operator +=(tmatnm<T,N,M> &a, const tmatnm<T,N,M> &b) {
     return a = a + b;
 }
+template <typename T, int N, int M>
 inline tmatnm<T,N,M> &operator -=(tmatnm<T,N,M> &a, const tmatnm<T,N,M> &b) {
     return a = a + b;
 }

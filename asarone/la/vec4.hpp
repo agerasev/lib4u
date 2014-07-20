@@ -37,20 +37,18 @@ struct tvecn<T,4> {
 	}
     inline T &operator ()(int n) {
         return data[n];
-    }
+	}
     inline T operator ()(int n) const {
         return data[n];
     }
-
-    template <int P>
-    inline T comp() const {return data[P];}
-    template <int P>
-    inline T &comp() {return data[P];}
-
-    using x = comp<0>;
-    using y = comp<1>;
-    using z = comp<2>;
-    using w = comp<3>;
+	inline T x() const {return data[0];}
+	inline T &x() {return data[0];}
+	inline T y() const {return data[1];}
+	inline T &y() {return data[1];}
+	inline T z() const {return data[2];}
+	inline T &z() {return data[2];}
+	inline T w() const {return data[3];}
+	inline T &w() {return data[3];}
 };
 
 #endif // VEC4_HPP
