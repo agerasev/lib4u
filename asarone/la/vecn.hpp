@@ -26,17 +26,12 @@ struct tvecn {
 		return *this;
 	}
 
-	inline T &operator ()(int n) {
+	inline T &operator [](int n) {
         return data[n];
     }
-	inline T operator ()(int n) const {
+	inline T operator [](int n) const {
         return data[n];
-    }
-
-    template <int P>
-    inline T comp() const {return data[P];}
-    template <int P>
-    inline T &comp() {return data[P];}
+	}
 };
 
 // Basic operations

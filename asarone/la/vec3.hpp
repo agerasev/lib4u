@@ -32,10 +32,10 @@ struct tvecn<T,3> {
 		this->data[2] = static_cast<T>(av.data[2]);
 		return *this;
 	}
-    inline T &operator ()(int n) {
+	inline T &operator [](int n) {
         return data[n];
 	}
-    inline T operator ()(int n) const {
+	inline T operator [](int n) const {
         return data[n];
     }
 	inline T x() const {return data[0];}
@@ -45,6 +45,52 @@ struct tvecn<T,3> {
 	inline T z() const {return data[2];}
 	inline T &z() {return data[2];}
 };
+
+// Basic operations
+  // Addition
+template<typename T>
+inline tvecn<T,3> operator +(const tvecn<T,3> &a, const tvecn<T,3> &b) {
+	return tvecn<T,3>(
+				a.x() + b.x(),
+				a.y() + b.y(),
+				a.z() + b.z()
+				);
+}
+  // Multiplication by constatnt
+template<typename T>
+inline tvecn<T,3> operator *(T a, const tvecn<T,3> &b) {
+	return tvecn<T,3>(
+				a*b.x(),
+				a*b.y(),
+				a*b.z()
+				);
+}
+  // Scalar product
+template<typename T>
+inline T operator *(const tvecn<T,3> &a, const tvecn<T,3> &b) {
+	return
+			a.x()*b.x() +
+			a.y()*b.y() +
+			a.z()*b.z();
+}
+
+// Derivative operations
+template<typename T>
+inline tvecn<T,3> operator *(const tvecn<T,3> &b, T a) {
+	return a*b;
+}
+template<typename T>
+inline tvecn<T,3> operator -(const tvecn<T,3> &a) {
+	return static_cast<T>(-1)*a;
+}
+template<typename T>
+inline tvecn<T,3> operator -(const tvecn<T,3> &a, const tvecn<T,3> &b) {
+	return a+(-b);
+}
+template<typename T>
+inline tvecn<T,3> operator /(const tvecn<T,3> &b, T a) {
+	return b*(static_cast<T>(1)/a);
+}
 
 // Cross product
 template <typename T>

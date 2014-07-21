@@ -41,7 +41,7 @@ struct tmatnm<T,N,N> {
     }
     inline T operator ()(const tvecn<int,2> &v) const {
         return data[v(1)*N + v(0)];
-    }
+	}
     inline tvecn<T,N> row(int n) const {
         return tvecn<T,N>(data + n*N);
     }
