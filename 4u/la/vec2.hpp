@@ -30,10 +30,16 @@ struct tvecn<T,2> {
 		return *this;
 	}
 	inline T &operator [](int n) {
-        return data[n];
+		return data[n];
 	}
 	inline T operator [](int n) const {
-        return data[n];
+		return data[n];
+	}
+	inline T &operator ()(int n) {
+		return data[n];
+	}
+	inline T operator ()(int n) const {
+		return data[n];
 	}
 	inline T x() const {return data[0];}
 	inline T &x() {return data[0];}

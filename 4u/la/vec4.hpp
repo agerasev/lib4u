@@ -41,6 +41,12 @@ struct tvecn<T,4> {
 	inline T operator [](int n) const {
         return data[n];
     }
+	inline T &operator ()(int n) {
+		return data[n];
+	}
+	inline T operator ()(int n) const {
+		return data[n];
+	}
 	inline T x() const {return data[0];}
 	inline T &x() {return data[0];}
 	inline T y() const {return data[1];}

@@ -32,6 +32,12 @@ struct tvecn {
 	inline T operator [](int n) const {
         return data[n];
 	}
+	inline T &operator ()(int n) {
+		return data[n];
+	}
+	inline T operator ()(int n) const {
+		return data[n];
+	}
 };
 
 // Basic operations
