@@ -4,7 +4,7 @@
 #include<SDL2/SDL.h>
 #include<GL/glew.h>
 
-#include<asarone/exception/filenotfoundexception.hpp>
+#include<4u/exception/filenotfoundexception.hpp>
 
 class Texture
 {

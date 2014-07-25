@@ -6,8 +6,8 @@
 #include<fstream>
 #include<string>
 
-#include<asarone/exception/compilationexception.hpp>
-#include<asarone/exception/filenotfoundexception.hpp>
+#include<4u/exception/glexception.hpp>
+#include<4u/exception/filenotfoundexception.hpp>
 
 class Shader
 {
@@ -74,7 +74,7 @@ public:
 		glShaderSource(id, 1, const_cast<const GLchar**>(&src), nullptr);
 	}
 
-	void compile() throw(CompilationException)
+	void compile() throw(GLException)
 	{
 		glCompileShader(id);
 		std::string log = logCompilation();
@@ -83,12 +83,13 @@ public:
 		glGetShaderiv(id,GL_COMPILE_STATUS,&st);
 		if(st == GL_TRUE)
 		{
+			/* to log file */
 			std::cout << log;
 			std::cout.flush();
 		}
 		else
 		{
-			throw CompilationException(log);
+			throw GLException(log);
 		}
 	}
 

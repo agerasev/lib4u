@@ -1,17 +1,19 @@
-#ifndef CONT_HPP
-#define CONT_HPP
+#ifndef CONTRAND_HPP
+#define CONTRAND_HPP
 
-#include"distrib.hpp"
+#include"rand.hpp"
 
+#include<ctime>
 
-class ContInt : public Distrib<unsigned int>
+class ContRandInt : public Rand<unsigned int>
 {
 private:
 	static const unsigned int LCA_A = 1103515245;
 	static const unsigned int LCA_B = 12345;
 	unsigned int last;
 public:
-	ContInt(unsigned int seed) : last(seed)
+	ContRandInt(unsigned int seed = static_cast<unsigned int>(time(nullptr)))
+		: last(seed)
 	{
 
 	}
@@ -22,16 +24,14 @@ public:
 	}
 };
 
-#include<ctime>
-
-class Cont : public Distrib<double>
+class ContRand : public Rand<double>
 {
 private:
-	ContInt generator;
+	ContRandInt generator;
 	const double NORM_FACTOR;
 public:
-	Cont() :
-		generator(static_cast<unsigned int>(time(nullptr))),
+	ContRand() :
+		generator(),
 		NORM_FACTOR(1.0/static_cast<double>(0xffffffffu))
 	{
 
@@ -43,4 +43,4 @@ public:
 	}
 };
 
-#endif // CONT_HPP
+#endif // CONTRAND_HPP

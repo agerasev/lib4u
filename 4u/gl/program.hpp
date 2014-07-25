@@ -3,7 +3,7 @@
 
 #include"shader.hpp"
 #include<iostream>
-#include<asarone/exception/linkageexception.hpp>
+#include<4u/exception/glexception.hpp>
 
 class Program
 {
@@ -52,7 +52,7 @@ public:
 	{
 		glDetachShader(id,sh->getID());
 	}
-	void link() throw(LinkageException)
+	void link() throw(GLException)
 	{
 		glLinkProgram(id);
 		if(logLinking())
@@ -61,7 +61,7 @@ public:
 		}
 		else
 		{
-			throw LinkageException("Could not attach shaders");
+			throw GLException("Could not attach shaders");
 		}
 	}
 

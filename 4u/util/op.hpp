@@ -1,50 +1,54 @@
 #ifndef OP_H
 #define OP_H
 
+/* what is faster: with conditions or without? */
+
 /*
- * These are some redefinitions of standard C/C++ operations
+ * Redefinitions of standard C/C++ operations
  * which aren't correct for negative values.
  */
-
-inline int _mod(int num, int den)
+template <typename T>
+inline T _mod(const T &num, const T &den)
 {
-    return (num<0)?(((num+1)%den)+den-1):(num%den);
+	const bool neg = num < 0;
+	return ((num + neg) % den) + neg*(den - 1);
+	// return (num<0)?(((num+1)%den)+den-1):(num%den);
 }
-inline int _div(int num, int den)
+template <typename T>
+inline T _div(const T &num, const T &den)
 {
-    if(den<0){num=-num;den=-den;}
-    return (num<0)?(((num+1)/den)-1):(num/den);
+	const bool neg = num < 0;
+	return ((num + 1)/den) - neg;
+	// if(den<0){num=-num;den=-den;}
+	// return (num<0)?(((num+1)/den)-1):(num/den);
 }
-inline int _divmod(int &num, int den)
+template <typename T>
+inline int _divmod(T &num, const T &den)
 {
-    int ret = _div(num,den);
-    num = _mod(num,den);
+	T ret = _div(num,den);
+	num = _mod(num,den);
     return ret;
 }
-inline int _min(int a, int b)
+
+/* min max without conditional */
+template <typename T>
+inline constexpr T _min(const T &a, const T &b)
 {
-    return (a<b)?a:b;
+	return a + (b - a)*(a > b);
 }
-inline double _min(double a, double b)
+template <typename T>
+inline constexpr T _max(const T &a, const T &b)
 {
-    return (a<b)?a:b;
+	return a + (b - a)*(a < b);
 }
-inline int _max(int a, int b)
+
+/* signum operation */
+template <typename T>
+inline constexpr int _sgn(T arg)
 {
-    return (a>b)?a:b;
+	return static_cast<int>(static_cast<T>(0) < arg) - static_cast<int>(arg < static_cast<T>(0));
 }
-inline double _max(double a, double b)
-{
-    return (a>b)?a:b;
-}
-inline long _floor(double a)
-{
-    return (a < 0.0)?(static_cast<int>(a) - 1):(static_cast<int>(a));
-}
-inline long _ceil(double a)
-{
-    return (a < 0.0)?(static_cast<int>(a)):(static_cast<int>(a + 1));
-}
+
 
 
 #endif // OP_H
