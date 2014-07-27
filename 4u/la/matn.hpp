@@ -29,6 +29,13 @@ struct tmatnm<T,N,N> {
         }
         return *this;
     }
+	template <typename S>
+	inline tmatnm(std::initializer_list<S> list) {
+		auto il = list.begin();
+		for(int i = 0; i < N*N && il != list.end(); ++i, ++il) {
+				data[i] = static_cast<T>(*il);
+		}
+	}
     //Access operators
     inline T &operator ()(int x, int y) {
         return data[y*N + x];

@@ -11,7 +11,7 @@ typedef tmatnm<int,3,3>        imat3;
 typedef tmatnm<double,4,4>     mat4;
 typedef tmatnm<int,4,4>        imat4;
 
-const mat2 nullmat2({0.0,0.0,0.0,0.0});
+const mat2 nullmat2{0.0,0.0,0.0,0.0};
 const imat2 nullimat2({0,0,0,0});
 const mat3 nullmat3({0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0});
 const imat3 nullimat3({0,0,0,0,0,0,0,0,0});

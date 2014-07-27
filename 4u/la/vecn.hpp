@@ -59,6 +59,17 @@ inline tvecn<T,N> operator *(T a, const tvecn<T,N> &b) {
     }
     return c;
 }
+
+// Component product
+template<typename T, int N>
+inline tvecn<T,N> operator &(const tvecn<T,N> &a, const tvecn<T,N> &b) {
+  tvecn<T,N> c;
+  for(int i = 0; i < N; ++i) {
+	  c.data[i] = a.data[i]*b.data[i];
+  }
+  return c;
+}
+
   // Scalar product
 template<typename T, int N>
 inline T operator *(const tvecn<T,N> &a, const tvecn<T,N> &b) {

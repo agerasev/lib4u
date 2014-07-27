@@ -3,6 +3,8 @@
 
 #include"vec.hpp"
 
+#include<initializer_list>
+
 // Matrix stricture
   // N - columns, M - rows
 template <typename T, int N, int M>
@@ -29,6 +31,13 @@ struct tmatnm {
 			data[i] = static_cast<T>(m.data[i]);
 		}
 		return *this;
+	}
+	template <typename S>
+	inline tmatnm(std::initializer_list<S> list) {
+		auto il = list.begin();
+		for(int i = 0; i < N*M && il != list.end(); ++i, ++il) {
+				data[i] = static_cast<T>(*il);
+		}
 	}
 	//Access operators
     inline T &operator ()(int x, int y) {
