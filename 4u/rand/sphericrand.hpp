@@ -15,41 +15,71 @@ class SphericRand : public Rand<vec3>
 private:
 	ContRand generator;
 public:
+	static vec3 wrap(ContRand &rand)
+	{
+		double phi = 2.0*PI*rand.get();
+		double theta = acos(1.0 - 2.0*rand.get());
+		return vec3(cos(phi)*sin(theta),sin(phi)*sin(theta),cos(theta));
+	}
 	virtual vec3 get()
 	{
-		double phi = 2.0*PI*generator.get();
-		double theta = acos(1.0 - 2.0*generator.get());
-		return vec3(cos(phi)*sin(theta),sin(phi)*sin(theta),cos(theta));
+		return wrap(generator);
 	}
 };
 
-class SemiSphericRand : public Rand<vec3>
+class SemiSphericRand : public Rand<vec3, const vec3 &>
 {
 private:
 	SphericRand generator;
-	vec3 normal;
-public:
-	SemiSphericRand()
+	static vec3 reflect(const vec3 &rand, const vec3 &normal)
 	{
-
-	}
-
-	SemiSphericRand(const vec3 &n)
-		: normal(n)
-	{
-
-	}
-
-	void setNormal(const vec3 &n)
-	{
-		normal = n;
-	}
-
-	virtual vec3 get()
-	{
-		vec3 rand = generator.get();
 		double proj = rand*normal;
 		return rand - static_cast<double>(proj < 0)*(2.0*normal*proj);
+	}
+public:
+	static vec3 wrap(SphericRand &spheric_rand, const vec3 &normal)
+	{
+		return reflect(spheric_rand.get(),normal);
+	}
+	static vec3 wrap(ContRand &rand, const vec3 &normal)
+	{
+		return reflect(SphericRand::wrap(rand),normal);
+	}
+	virtual vec3 get(const vec3 &normal)
+	{
+		return wrap(generator,normal);
+	}
+};
+
+class SemiSphericCosineRand : public Rand<vec3, const vec3 &>
+{
+private:
+	ContRand generator;
+
+public:
+	static vec3 wrap(ContRand &rand, const vec3 &normal)
+	{
+		// Generates basis for <normal,*> kernel
+		vec3 nx, ny;
+		if(vec3(0,0,1)*normal < 0.6 && vec3(0,0,1)*normal > -0.6)
+		{
+			nx = vec3(0,0,1);
+		}
+		else
+		{
+			nx = vec3(1,0,0);
+		}
+		ny = norm(nx^normal);
+		nx = ny^normal;
+
+		// Computes distribution
+		double phi = 2.0*PI*rand.get();
+		double theta = acos(1.0 - 2.0*rand.get())/2.0;
+		return nx*cos(phi)*sin(theta) + ny*sin(phi)*sin(theta) + normal*cos(theta);
+	}
+	virtual vec3 get(const vec3 &normal)
+	{
+		return wrap(generator,normal);
 	}
 };
 

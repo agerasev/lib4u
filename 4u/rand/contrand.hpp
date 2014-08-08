@@ -27,19 +27,24 @@ public:
 class ContRand : public Rand<double>
 {
 private:
+	static constexpr double NORM_FACTOR = 1.0/static_cast<double>(0xffffffffu);
 	ContRandInt generator;
-	const double NORM_FACTOR;
+
 public:
-	ContRand() :
-		generator(),
-		NORM_FACTOR(1.0/static_cast<double>(0xffffffffu))
+	ContRand(unsigned int seed = static_cast<unsigned int>(time(nullptr))) :
+		generator(seed)
 	{
 
 	}
 
+	static double wrap(ContRandInt &rand)
+	{
+		return NORM_FACTOR*rand.get();
+	}
+
 	virtual double get()
 	{
-		return NORM_FACTOR*generator.get();
+		return wrap(generator);
 	}
 };
 
