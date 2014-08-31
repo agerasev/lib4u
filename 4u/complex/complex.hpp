@@ -31,19 +31,19 @@ public:
 		data[1] = static_cast<T>(c.data[1]);
 	}
 
-	inline constexpr T &re()
+	inline T &re()
 	{
 		return data[0];
 	}
-	inline constexpr T &im()
+	inline T &im()
 	{
 		return data[1];
 	}
-	inline constexpr T re() const
+	inline T re() const
 	{
 		return data[0];
 	}
-	inline constexpr T im() const
+	inline T im() const
 	{
 		return data[1];
 	}
@@ -69,17 +69,17 @@ inline constexpr complex<T> operator - (const complex<T> &a, const complex<T> &b
 {
 	return a+(-b);
 }
-template <typename T>
+template <typename T, typename S>
 inline constexpr complex<T> operator * (const S &a, const complex<T> &b)
 {
 	return complex<T>(static_cast<T>(a)*b.re(),static_cast<T>(a)*b.im());
 }
-template <typename T>
+template <typename T, typename S>
 inline constexpr complex<T> operator * (const complex<T> &a, const S &b)
 {
 	return b*a;
 }
-template <typename T>
+template <typename T, typename S>
 inline constexpr complex<T> operator / (const complex<T> &a, const S &b)
 {
 	return a*(static_cast<T>(1)/static_cast<T>(b));
@@ -103,7 +103,7 @@ inline constexpr complex<T> conj(const complex<T> &c)
 template <typename T>
 inline constexpr T abs2(const T &c)
 {
-	return c*conj(c);;
+	return c*conj(c);
 }
 
 /* Multiplication */
@@ -111,7 +111,7 @@ inline constexpr T abs2(const T &c)
 template <typename T>
 inline constexpr complex<T> operator * (const complex<T> &a, const complex<T> &b)
 {
-	return complex<T>(a.re()*b.re() - conj(b.im())*a.im(), c.im()*a.re() + a.im()*conj(c.re()));
+	return complex<T>(a.re()*b.re() - conj(b.im())*a.im(), b.im()*a.re() + a.im()*conj(b.re()));
 }
 
 /* Division */
