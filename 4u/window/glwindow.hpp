@@ -7,14 +7,14 @@
 
 #include<4u/exception/glexception.hpp>
 
-#include "sdlwindow.hpp"
+#include"rawsdlwindow.hpp"
 
-class GLWindow : public SDLWindow {
+class GLWindow : public RawSDLWindow {
 private:
     SDL_GLContext context;
 public:
 	GLWindow(const char *name = "SDL GL Window", const Size &s = Size(800,600), unsigned int flags = 0) throw(GLException)
-		: SDLWindow(name,s,SDL_WINDOW_OPENGL|flags)
+		: RawSDLWindow(name,s,SDL_WINDOW_OPENGL|flags)
 	{
 
 		context = SDL_GL_CreateContext(getSDLWindow());
