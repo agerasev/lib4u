@@ -117,7 +117,7 @@ private:
 			_T c = static_cast<_T>(0);
 			const int rc = 0;
 			for(int i = 0; i < N; ++i) {
-				c += mat.cofactor(i,rc);
+				c += mat(i,rc)*mat.cofactor(i,rc);
 			}
 			return c;
 		}
@@ -134,19 +134,23 @@ public:
 	inline T det() const {
 		return __Determinator__<T,N>::det(*this);
 	}
-	/* Reverse matrix */
-	inline tmatnm<T,N,N> rev() const
+	/* Adjugate matrix */
+	inline tmatnm<T,N,N> adj() const
 	{
 		tmatnm<T,N,N> ret;
-		T revd = static_cast<T>(1)/det();
 		for(int i = 0; i < N; ++i)
 		{
 			for(int j = 0; j < N; ++j)
 			{
-				ret(i,j) = cofactor(i,j)*revd;
+				ret(j,i) = cofactor(i,j);
 			}
 		}
 		return ret;
+	}
+	/* Inverse matrix */
+	inline tmatnm<T,N,N> invert() const
+	{
+		return this->adj()/this->det();
 	}
 };
 
