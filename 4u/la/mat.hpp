@@ -56,7 +56,7 @@ struct Unroller
 template <typename T, int N>
 struct Unroller<T,N,0>
 {
-	static void unroll(T *ptr)
+	static void unroll(T *)
 	{
 		
 	}
@@ -156,12 +156,16 @@ struct mat
 	
 	vec<T,N> row(int n) const
 	{
-		return vec<T,N>().memcopy(data + n*N);
+		vec<T,N> ret;
+		ret.memcopy(data + n*N);
+		return ret;
 	}
 	
 	vec<T,M> col(int n) const
 	{
-		return vec<T,M>().memcopy(data + n,N);
+		vec<T,N> ret;
+		ret.memcopy(data + n,N);
+		return ret;
 	}
 	
 	T &operator [](const vec<int,2> &v)

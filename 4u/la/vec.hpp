@@ -25,7 +25,7 @@ template <typename T>
 struct Unroller<T,0>
 {
 	
-	static void unroll(T *ptr)
+	static void unroll(T *)
 	{
 		
 	}
@@ -77,6 +77,7 @@ struct vec
 	template <typename ... Args>
 	vec(Args ... args)
 	{
+		/* TODO: Initialize with vectors with less dimensions */
 		unroll(args...);
 	}
 	
@@ -118,12 +119,54 @@ struct vec
 	{
 		return data[n];
 	}
+	
+		/* Index access */
+	
+	T x() const
+	{
+		return data[0];
+	}
+	
+	T &x()
+	{
+		return data[0];
+	}
+	
+	T y() const
+	{
+		return data[1];
+	}
+	
+	T &y()
+	{
+		return data[1];
+	}
+	
+	T z() const
+	{
+		return data[2];
+	}
+	
+	T &z()
+	{
+		return data[2];
+	}
+	
+	T w() const
+	{
+		return data[3];
+	}
+	
+	T &w()
+	{
+		return data[3];
+	}
 };
 
 /* Addition */
 
 template<typename T, typename S, int N>
-vec<typename std::common_type<T,S>::type,N> operator +(const vec<T,N> &a, const vec<T,N> &b) 
+vec<typename std::common_type<T,S>::type,N> operator +(const vec<T,N> &a, const vec<S,N> &b) 
 {
 	vec<typename std::common_type<T,S>::type,N> c;
 	for(int i = 0; i < N; ++i) 
