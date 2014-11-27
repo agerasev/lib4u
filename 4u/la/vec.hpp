@@ -7,22 +7,22 @@
 
 namespace __vec_tools__
 {
-	
+
 template <typename T, int Left>
-struct ConstructorUnroller
+struct Unroller
 {
 	
 	template <typename S, typename ... Args>
 	static void unroll(T *ptr, S arg, Args ... args)
 	{
 		*ptr = static_cast<T>(arg);
-		ConstructorUnroller<T,Left-1>::unroll(ptr+1,args...);
+		Unroller<T,Left-1>::unroll(ptr+1,args...);
 	}
 	
 };
 
 template <typename T>
-struct ConstructorUnroller<T,0>
+struct Unroller<T,0>
 {
 	
 	static void unroll(T *ptr)
@@ -32,22 +32,40 @@ struct ConstructorUnroller<T,0>
 	
 };
 
+template <typename T, typename S, int N>
+void memcopy(T *dst, const S *src, int d = 1)
+{
+	for(int i = 0; i < N; ++i)
+	{
+		dst[i] = static_cast<T>(src[d*i]);
+	}
+}
+
 }
 
 template <typename T, int N>
 struct vec
 {
-	/* Data field */
+	/* Types */
+	
+	typedef T type;
+	static const int size = N;
+	
+	/* Data */
 	
 	T data[N];
 	
-	void copyData(const T *ptr, int d = 1)
+	template <typename S>
+	void memcopy(const S *src, int d = 1)
 	{
-		for(int i = 0; i < N; ++i) {
-			data[i] = ptr[d*i];
-		}
+		__vec_tools__::memcopy<T,S,N>(data,src,d);
 	}
-
+	
+	template <typename ... Args>
+	void unroll(Args ... args)
+	{
+		__vec_tools__::Unroller<T,N>::unroll(data,args...);
+	}
 
 	/* Constructors */
 	
@@ -59,48 +77,24 @@ struct vec
 	template <typename ... Args>
 	vec(Args ... args)
 	{
-		__vec_tools__::ConstructorUnroller<T,N>::unroll(data,args...);
+		unroll(args...);
 	}
-	
 	
 	/* Copy constructors */
 	
 	template <typename S>
 	vec(const vec<S,N> &v)
 	{
-		for(int i = 0; i < N; ++i)
-		{
-			data[i] = static_cast<T>(v.data[i]);
-		}
+		memcopy(v.data);
 	}
-	
-	vec(const vec<T,N> &v)
-	{
-		copyData(v.data);
-	}
-	
 	
 	/* Assign operators */
 	
 	template <typename S>
 	vec &operator = (const vec<S,N> &v)
 	{
-		for(int i = 0; i < N; ++i)
-		{
-			data[i] = static_cast<T>(v.data[i]);
-		}
+		memcopy(v.data);
 		return *this;
-	}
-	
-	vec &operator = (const vec<T,N> &v)
-	{
-		copyData(v.data);
-		return *this;
-	}
-	
-	T z() const
-	{
-		return data[2];
 	}
 	
 	/* Access operators */
@@ -126,13 +120,12 @@ struct vec
 	}
 };
 
-
 /* Addition */
 
 template<typename T, typename S, int N>
-vec<std::common_type<T,S>,N> operator +(const vec<T,N> &a, const vec<T,N> &b) 
+vec<typename std::common_type<T,S>::type,N> operator +(const vec<T,N> &a, const vec<T,N> &b) 
 {
-	vec<std::common_type<T,S>,N> c;
+	vec<typename std::common_type<T,S>::type,N> c;
 	for(int i = 0; i < N; ++i) 
 	{
 		c.data[i] = a.data[i] + b.data[i];
@@ -140,20 +133,18 @@ vec<std::common_type<T,S>,N> operator +(const vec<T,N> &a, const vec<T,N> &b)
 	return c;
 }
 
-
 /* Multiplication by constant */
 
 template<typename T, typename S, int N>
-vec<std::common_type<T,S>,N> operator *(S a, const vec<T,N> &b) 
+vec<typename std::common_type<T,S>::type,N> operator *(S a, const vec<T,N> &b) 
 {
-	vec<std::common_type<T,S>,N> c;
+	vec<typename std::common_type<T,S>::type,N> c;
 	for(int i = 0; i < N; ++i) 
 	{
 		c.data[i] = a*b.data[i];
 	}
 	return c;
 }
-
 
 /* Component product */
 
@@ -168,13 +159,12 @@ vec<T,N> operator &(const vec<T,N> &a, const vec<T,N> &b)
   return c;
 }
 
-
 /* Scalar product */
 
 template<typename T, typename S, int N>
-std::common_type<T,S> operator *(const vec<T,N> &a, const vec<S,N> &b) 
+typename std::common_type<T,S>::type operator *(const vec<T,N> &a, const vec<S,N> &b) 
 {
-	T c = static_cast<std::common_type<T,S>>(0);
+	T c = static_cast<typename std::common_type<T,S>::type>(0);
 	for(int i = 0; i < N; ++i) 
 	{
 		c += a.data[i]*b.data[i];
@@ -182,32 +172,29 @@ std::common_type<T,S> operator *(const vec<T,N> &a, const vec<S,N> &b)
 	return c;
 }
 
-
 /* Pseudo cross product */
 
 template <typename T, typename S>
-std::common_type<T,S> operator ^(const vec<T,2> &a, const vec<S,2> &b)
+typename std::common_type<T,S>::type operator ^(const vec<T,2> &a, const vec<S,2> &b)
 {
 	return a[0]*b[1] - a[1]*b[0];
 }
 
-
 /* Cross product */
 
 template <typename T, typename S>
-vec<std::common_type<T,S>,3> operator ^(const vec<T,3> &a, const vec<S,3> &b) {
-	return vec<T,3>(
+vec<typename std::common_type<T,S>::type,3> operator ^(const vec<T,3> &a, const vec<S,3> &b) {
+	return vec<typename std::common_type<T,S>::type,3>(
 	  a[1]*b[2] - b[1]*a[2],
 	  a[2]*b[0] - b[2]*a[0],
 	  a[0]*b[1] - b[0]*a[1]
 	);
 }
 
-
 /* Derivative operations */
 
 template<typename T, typename S, int N>
-vec<std::common_type<T,S>,N> operator *(const vec<T,N> &b, S a)
+vec<typename std::common_type<T,S>::type,N> operator *(const vec<T,N> &b, S a)
 {
 	return a*b;
 }
@@ -225,17 +212,16 @@ vec<T,N> operator -(const vec<T,N> &a)
 }
 
 template<typename T, typename S, int N>
-vec<std::common_type<T,S>,N> operator -(const vec<T,N> &a, const vec<S,N> &b) 
+vec<typename std::common_type<T,S>::type,N> operator -(const vec<T,N> &a, const vec<S,N> &b) 
 {
 	return a+(-b);
 }
 
 template<typename T, typename S, int N>
-vec<std::common_type<T,S>,N> operator /(const vec<T,N> &b, S a) 
+vec<typename std::common_type<T,S>::type,N> operator /(const vec<T,N> &b, S a) 
 {
-	return b*(static_cast<T>(1)/static_cast<T>(a));
+	return b*(static_cast<typename std::common_type<T,S>::type>(1)/static_cast<typename std::common_type<T,S>::type>(a));
 }
-
 
 /* Assign operations */
 
@@ -263,7 +249,6 @@ vec<T,N> &operator /=(vec<T,N> &a, S b)
 	return a = a/b;
 }
 
-
 /* Math */
 
 #include<cmath>
@@ -286,7 +271,6 @@ inline vec<T,N> norm(const vec<T,N> &v)
 	return v/length(v);
 }
 
-
 /* Comparison */
 
 template<typename T, int N>
@@ -307,7 +291,6 @@ inline bool operator !=(const vec<T,N> &a, const vec<T,N> &b)
 {
 	return !(a==b);
 }
-
 
 /* Type aliases and constants */
 
