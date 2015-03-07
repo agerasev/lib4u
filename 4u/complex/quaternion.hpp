@@ -1,6 +1,4 @@
-#ifndef QUATERNION_HPP
-#define QUATERNION_HPP
-
+#pragma once
 #include"complex.hpp"
 
 template <typename T>
@@ -38,44 +36,73 @@ public:
 		data[1] = static_cast<complex<T>>(c.data[1]);
 	}
 
-	inline T &r()
+	T &r()
 	{
-		return data[0].re();
+		return data[0].data[0];
 	}
-	inline T &i()
+	T &i()
 	{
-		return data[0].im();
+		return data[0].data[1];
 	}
-	inline T &j()
+	T &j()
 	{
-		return data[1].re();
+		return data[1].data[0];
 	}
-	inline T &k()
+	T &k()
 	{
-		return data[1].im();
+		return data[1].data[1];
+	}
+	T r() const
+	{
+		return data[0].data[0];
+	}
+	T i() const
+	{
+		return data[0].data[1];
+	}
+	T j() const
+	{
+		return data[1].data[0];
+	}
+	T k() const
+	{
+		return data[1].data[1];
 	}
 
-	inline complex<T> &re()
+	complex<T> &re()
 	{
 		return data[0];
 	}
-	inline complex<T> &im()
+	complex<T> &im()
 	{
 		return data[1];
 	}
-	inline complex<T> re() const
+	complex<T> re() const
 	{
 		return data[0];
 	}
-	inline complex<T> im() const
+	complex<T> im() const
 	{
 		return data[1];
 	}
 };
 
-/*
 template <typename T>
 typedef complex<complex<T>> quaternion<T>;
-*/
 
-#endif // QUATERNION_HPP
+/* Normalizing operation */
+template <typename T>
+T abs2(const quaternion<T> &c)
+{
+	return c.r()*c.r() + c.i()*c.i() + c.j()*c.j() + c.k()*c.k();
+}
+
+template <typename T>
+T abs(const quaternion<T> &c)
+{
+	return sqrt(abs2(c));
+}
+
+typedef quaternion<double> qdouble;
+typedef quaternion<float> qfloat;
+typedef quaternion<int> qint;
