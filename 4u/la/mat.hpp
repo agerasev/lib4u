@@ -62,7 +62,7 @@ struct Unroller<T,N,0>
 	}
 };
 
-};
+}
 
 /* Matrix stricture */
 /* N - columns, M - rows */
@@ -241,7 +241,7 @@ struct Determinator<T,1>
 	}
 };
 
-};
+}
 
 /* Transpose */
 
