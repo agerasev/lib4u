@@ -27,7 +27,7 @@ public:
 class ContRand : public Rand<double>
 {
 private:
-	static constexpr double NORM_FACTOR = 1.0/static_cast<double>(0xffffffffu);
+	static   double NORM_FACTOR = 1.0/static_cast<double>(0xffffffffu);
 	ContRandInt generator;
 
 public:

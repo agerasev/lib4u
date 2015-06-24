@@ -2,26 +2,26 @@
 #define OP_H
 
 template <typename T>
-inline constexpr T _abs(const T &a)
+inline   T _abs(const T &a)
 {
 	return (2*(a > 0) - 1)*a;
 }
 
 /* min max without conditional */
 template <typename T>
-inline constexpr T _min(const T &a, const T &b)
+inline   T _min(const T &a, const T &b)
 {
 	return a + (b - a)*(a > b);
 }
 template <typename T>
-inline constexpr T _max(const T &a, const T &b)
+inline   T _max(const T &a, const T &b)
 {
 	return a + (b - a)*(a < b);
 }
 
 /* signum operation */
 template <typename T>
-inline constexpr int sgn(T arg)
+inline   int sgn(T arg)
 {
 	return static_cast<int>(static_cast<T>(0) < arg) - static_cast<int>(arg < static_cast<T>(0));
 }
@@ -85,7 +85,7 @@ inline T _pow(T arg, int exp)
 
 /* x^^2 operator */
 template <typename T>
-inline constexpr T sqr(T arg)
+inline   T sqr(T arg)
 {
 	return arg*arg;
 }
